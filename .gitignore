@@ -7,3 +7,4 @@ data/chroma/
 *.log
 .DS_Store
 eval/eval_report*
+agents/reports/

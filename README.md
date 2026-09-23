@@ -121,6 +121,39 @@ OPENAI_API_KEY=sk-xxx
 
 ---
 
+## 进阶项目：多智能体报告生成（LangGraph）
+
+让「研究员 → 写手 → 审校」三个 Agent 协作：输入一个主题，自动检索本地知识库，产出一份带来源标注的 Markdown 报告。
+
+```
+[研究员] 检索+简报 ──▶ [写手] 撰写报告 ──▶ [审校] 检查 ──(通过)──▶ 定稿
+                            ▲                    │
+                            └───(需修改，最多重写2次)──┘
+```
+
+### 运行
+
+```bash
+# 需用安装了 langgraph 的 Python 环境（本项目为 eval-venv，Python 3.12）
+python agents/main.py "RAG 是什么"
+```
+
+报告保存到 `agents/reports/report.md`。
+
+### 目录
+
+```
+agents/
+├── main.py        # CLI 入口
+├── graph.py       # LangGraph 工作流编排（含条件循环边）
+├── prompts.py     # 三个角色 prompt + 状态定义
+└── tools.py       # 工具：search（复用 RAG 检索）+ save_report
+```
+
+面试可聊的点：角色分工、LangGraph 状态机与条件路由、Agent 间通信、失败重试（审校回退重写）、成本控制（限制重写次数）、工具调用。
+
+---
+
 ## 可调参数（.env）
 
 | 参数 | 默认 | 说明 |
