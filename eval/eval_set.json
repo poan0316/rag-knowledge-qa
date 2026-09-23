@@ -1,0 +1,164 @@
+[
+  {
+    "question": "什么是 RAG？",
+    "ground_truth": "RAG（检索增强生成）是一种把信息检索与大语言模型生成结合的技术架构，先从外部知识库检索出与问题最相关的文档片段，再作为上下文拼接到提示词中交给大语言模型生成答案，用于回答超出训练数据范围或属于私有/实时数据的知识问题，并给出来源依据。",
+    "contexts": [
+      "RAG（Retrieval-Augmented Generation，检索增强生成）是一种把「信息检索」与「大语言模型生成」结合的技术架构。核心流程是：先从外部知识库中检索出与用户问题最相关的文档片段，再把这些片段作为上下文拼接到提示词（Prompt）中，交给大语言模型生成最终答案。RAG 解决的核心问题是：让大语言模型能够回答超出其训练数据范围、或属于私有/实时数据的知识问题，同时提供答案的来源依据。"
+    ]
+  },
+  {
+    "question": "为什么需要 RAG？它解决了哪些问题？",
+    "ground_truth": "RAG 可以缓解幻觉、接入私有知识、保证知识时效性、支持答案溯源，并且相比微调无需训练、成本低、迭代快。",
+    "contexts": [
+      "- 缓解幻觉：模型基于检索到的真实文档作答，而不是凭空编造。\n- 接入私有知识：企业内部的文档、数据库不经过训练也能被问答。\n- 知识时效性：知识库更新即可生效，无需重新训练或微调模型。\n- 可溯源：答案可以标注引用来源，便于人工核验。\n- 成本低：相比微调（Fine-tuning），RAG 无需训练，迭代快。"
+    ]
+  },
+  {
+    "question": "一个完整的 RAG 系统包含哪些步骤？",
+    "ground_truth": "包含文档解析、分块、向量化、写入向量库、检索、重排（可选）、生成这七步。",
+    "contexts": [
+      "典型的 RAG 系统由「离线索引」与「在线问答」两阶段组成：1. 文档解析 2. 分块（Chunking）3. 向量化（Embedding）4. 写入向量库 5. 检索（Retrieval）6. 重排（Rerank，可选）7. 生成（Generation）。"
+    ]
+  },
+  {
+    "question": "RAG 和微调（Fine-tuning）相比有什么优势？",
+    "ground_truth": "RAG 相比微调无需训练、成本低、迭代快，知识库更新即可生效。",
+    "contexts": [
+      "- 知识时效性：知识库更新即可生效，无需重新训练或微调模型。\n- 成本低：相比微调（Fine-tuning），RAG 无需训练，迭代快。"
+    ]
+  },
+  {
+    "question": "chunk_size 和 chunk_overlap 分别是什么？怎么影响分块？",
+    "ground_truth": "chunk_size 是每个分块的最大长度，过大则检索粒度粗、噪声多，过小则语义被切断；chunk_overlap 是相邻分块之间的重叠长度，能避免关键信息被切在边界上而丢失，常见设置为 chunk_size 的 10% 左右。",
+    "contexts": [
+      "- chunk_size：每个分块的最大长度（字符数或 token 数）。过大则检索粒度粗、噪声多；过小则语义被切断。\n- chunk_overlap：相邻分块之间的重叠长度。重叠能避免关键信息刚好被切在边界上而丢失，常见设置为 chunk_size 的 10% 左右。"
+    ]
+  },
+  {
+    "question": "有哪些常见的分块策略？",
+    "ground_truth": "有固定大小分块、递归字符分割（RecursiveCharacterTextSplitter）、语义分块、结构感知分块。",
+    "contexts": [
+      "- 固定大小分块：按固定长度切，实现简单，但容易切断语义。\n- 递归字符分割（RecursiveCharacterTextSplitter）：按段落、换行、句子等分隔符优先级递归切，最常用。\n- 语义分块：借助模型判断语义边界，效果好但实现复杂、成本高。\n- 结构感知分块：按文档自带结构（标题、表格、代码块）切，适合结构化文档。"
+    ]
+  },
+  {
+    "question": "什么是 Embedding？",
+    "ground_truth": "Embedding 是把文本映射到高维稠密向量空间的技术，语义相近的文本其向量在空间中距离更近，是连接自然语言与向量检索的桥梁。",
+    "contexts": [
+      "Embedding 是把文本映射到高维稠密向量空间的技术。语义相近的文本，其向量在空间中距离更近。Embedding 是连接「自然语言」与「向量检索」的桥梁。"
+    ]
+  },
+  {
+    "question": "常见的中文 embedding 模型有哪些？中文场景优先选什么？",
+    "ground_truth": "常见的有 OpenAI text-embedding-3 系列、BGE 系列（bge-m3、bge-large-zh）、nomic-embed-text；中文场景优先考虑 bge-m3、bge-large-zh 等中文能力强的模型。",
+    "contexts": [
+      "- OpenAI text-embedding-3-small / 3-large：云端，效果好。\n- BGE 系列（bge-m3、bge-large-zh）：开源，多语言/中文表现强，bge-m3 支持中英混合与长文本。\n- nomic-embed-text：开源，多语言，本地部署方便。\n- 中文场景优先考虑 bge-m3、bge-large-zh 等中文能力强的模型。"
+    ]
+  },
+  {
+    "question": "余弦相似度和欧氏距离有什么区别？",
+    "ground_truth": "余弦相似度衡量向量方向一致性，最常用于文本 embedding；欧氏距离衡量绝对距离，对向量长度敏感；另外还有内积，方向与长度都考虑。",
+    "contexts": [
+      "- 余弦相似度（Cosine Similarity）：衡量向量方向一致性，最常用于文本 embedding。\n- 欧氏距离（Euclidean Distance）：衡量绝对距离，对向量长度敏感。\n- 内积（Dot Product）：向量点积，方向与长度都考虑。"
+    ]
+  },
+  {
+    "question": "常见的向量数据库有哪些？",
+    "ground_truth": "有 Chroma、FAISS、Milvus、pgvector。Chroma 轻量易用适合原型；FAISS 是检索库性能强但不是完整数据库；Milvus 适合大规模生产；pgvector 是 PostgreSQL 扩展。",
+    "contexts": [
+      "- Chroma：轻量、易用，适合原型与个人项目。\n- FAISS：Meta 开源的向量检索库，性能强，但不是完整数据库。\n- Milvus：分布式向量数据库，适合大规模生产。\n- pgvector：PostgreSQL 扩展，可与关系数据共存。"
+    ]
+  },
+  {
+    "question": "top-k 取值怎么影响检索效果？",
+    "ground_truth": "top-k 越大召回越全但噪声越多，常见取 3~8。",
+    "contexts": [
+      "检索时把用户问题同样向量化，再在向量库中找与问题向量最相似的 k 个分块（top-k）。top-k 越大召回越全但噪声越多，常见取 3~8。"
+    ]
+  },
+  {
+    "question": "召回率和精确率分别衡量什么？",
+    "ground_truth": "召回率衡量找得全不全，是相关文档被检索出来的比例；精确率衡量找得准不准，是检索结果中相关文档的比例。",
+    "contexts": [
+      "- 召回率（Recall）：相关文档被检索出来的比例，衡量「找得全不全」。\n- 精确率（Precision）：检索结果中相关文档的比例，衡量「找得准不准」。"
+    ]
+  },
+  {
+    "question": "为什么向量检索之后还需要重排？",
+    "ground_truth": "因为向量检索是双塔（bi-encoder）架构，query 和 document 各自独立编码，速度快但精度有限；重排阶段用精度更高的模型对候选片段重新打分，提升最终排序质量。",
+    "contexts": [
+      "向量检索是「双塔」（bi-encoder）架构，query 和 document 各自独立编码，速度快但精度有限。重排阶段用精度更高的模型对候选片段重新打分，提升最终排序质量。"
+    ]
+  },
+  {
+    "question": "bi-encoder 和 cross-encoder 有什么区别？",
+    "ground_truth": "bi-encoder 是 query 和 document 分别编码后算相似度，速度快、可离线预存文档向量；cross-encoder 是 query 和 document 成对输入、模型交互计算相关性，精度高但慢；常见做法是先向量检索召回较多候选，再用 cross-encoder 精排取前 top-k。",
+    "contexts": [
+      "- bi-encoder：query 和 document 分别编码后算相似度，速度快，可离线预存文档向量。\n- cross-encoder：query 和 document 成对输入，模型交互计算相关性分数，精度高但慢。\n- 常见做法：先向量检索召回较多候选（如 top-k×3），再用 cross-encoder 精排取前 top-k。"
+    ]
+  },
+  {
+    "question": "在 RAG 里 prompt 应该怎么组装？",
+    "ground_truth": "先给出「你只能根据以下上下文回答」的约束，再放上下文，最后放问题，并要求标注来源；这样的约束能显著降低模型编造的概率。",
+    "contexts": [
+      "把检索到的上下文与用户问题拼进模板，例如：先给出「你只能根据以下上下文回答」的约束，再放上下文，最后放问题，并要求标注来源。约束能显著降低模型编造的概率。"
+    ]
+  },
+  {
+    "question": "引用溯源是什么？为什么重要？",
+    "ground_truth": "引用溯源是让模型在答案中标注引用了哪条上下文（如编号 [1]、[2]），前端据此展示来源文档与片段，是 RAG 相对纯生成的重要优势。",
+    "contexts": [
+      "让模型在答案中标注引用了哪条上下文（如编号 [1]、[2]），前端据此展示来源文档与片段。溯源是 RAG 相对纯生成的重要优势。"
+    ]
+  },
+  {
+    "question": "Ragas 有哪些核心评测指标？",
+    "ground_truth": "有忠实度（Faithfulness）、答案相关性（Answer Relevancy）、上下文精确率（Context Precision）、上下文召回率（Context Recall）。",
+    "contexts": [
+      "- Faithfulness（忠实度）：答案中的每句陈述是否都能在检索上下文里找到依据，衡量「有没有幻觉」。\n- Answer Relevancy（答案相关性）：答案是否紧扣问题、有无跑题废话。\n- Context Precision（上下文精确率）：检索到的上下文里，真正有用的排在多靠前。\n- Context Recall（上下文召回率）：标准答案所需的信息是否都被检索出来。"
+    ]
+  },
+  {
+    "question": "忠实度（Faithfulness）这个指标衡量什么？",
+    "ground_truth": "忠实度衡量答案中的每句陈述是否都能在检索上下文里找到依据，也就是有没有幻觉。",
+    "contexts": [
+      "Faithfulness（忠实度）：答案中的每句陈述是否都能在检索上下文里找到依据，衡量「有没有幻觉」。"
+    ]
+  },
+  {
+    "question": "设计 Ragas 评测集要注意什么？",
+    "ground_truth": "评测集是「问题 + 标准答案 + 参考上下文」的三元组，必须锚定知识库实际文档，覆盖不同章节与题型（事实提取、数值、对比、跨块综合、换词改写）。",
+    "contexts": [
+      "评测集是「问题 + 标准答案 + 参考上下文」的三元组，必须锚定知识库实际文档，覆盖不同章节与题型（事实提取、数值、对比、跨块综合、换词改写）。"
+    ]
+  },
+  {
+    "question": "什么是 Agent？它和普通 LLM 调用有什么区别？",
+    "ground_truth": "Agent 是能自主规划、调用工具、根据反馈迭代的大模型应用，强调「思考-行动-观察」的循环；相比单次问答，它不只是生成一次答案。",
+    "contexts": [
+      "Agent 是能自主规划、调用工具、根据反馈迭代的大模型应用。相比单次问答，Agent 强调「思考-行动-观察」的循环。"
+    ]
+  },
+  {
+    "question": "ReAct 模式是什么？",
+    "ground_truth": "ReAct（Reasoning + Acting）让模型交替输出「思考（Thought）→ 行动（Action）→ 观察（Observation）」，通过调用外部工具（搜索、计算、读写文件）完成任务，是多数 Agent 框架的底层范式。",
+    "contexts": [
+      "ReAct（Reasoning + Acting）让模型交替输出「思考（Thought）→ 行动（Action）→ 观察（Observation）」，通过调用外部工具（搜索、计算、读写文件）完成任务，是多数 Agent 框架的底层范式。"
+    ]
+  },
+  {
+    "question": "CrewAI 和 LangGraph 分别适合什么场景？",
+    "ground_truth": "LangGraph 用图结构（节点 + 边 + 状态）编排多步骤 Agent 流程；CrewAI 是面向「角色 + 任务」的多智能体协作框架，适合定义多个专家角色（如研究员、写手、审校）分工完成报告。",
+    "contexts": [
+      "- LangChain / LangGraph：LangGraph 用图结构（节点 + 边 + 状态）编排多步骤 Agent 流程。\n- CrewAI：面向「角色 + 任务」的多智能体协作框架，适合定义多个专家角色（如研究员、写手、审校）分工完成报告。"
+    ]
+  },
+  {
+    "question": "怎么降低大模型在问答里的幻觉？",
+    "ground_truth": "可以基于检索到的真实文档作答（RAG 缓解幻觉），并在 prompt 里给出「只能根据上下文回答」的约束来降低编造概率。",
+    "contexts": [
+      "- 缓解幻觉：模型基于检索到的真实文档作答，而不是凭空编造。",
+      "先给出「你只能根据以下上下文回答」的约束……约束能显著降低模型编造的概率。"
+    ]
+  }
+]

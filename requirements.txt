@@ -1,0 +1,33 @@
+# ===== 核心编排 =====
+langchain>=0.3.0
+langchain-community>=0.3.0
+langchain-chroma>=0.2.0
+langchain-text-splitters>=0.3.0
+
+# ===== 模型接入（按需，本地 Ollama 或云端 OpenAI）=====
+langchain-ollama>=0.2.0
+langchain-openai>=0.2.0
+
+# ===== 文档解析 =====
+pypdf>=5.0.0
+python-docx>=1.1.0
+docx2txt>=0.8
+pdfplumber>=0.11.0
+
+# ===== 向量库 =====
+chromadb>=0.5.0
+
+# ===== 服务 / 前端 =====
+streamlit>=1.38.0
+fastapi>=0.115.0
+uvicorn>=0.30.0
+
+# ===== 配置 =====
+python-dotenv>=1.0.0
+
+# ===== 评测（ragas 版本 API 变动大，建议按此区间装）=====
+ragas>=0.2.0,<0.3.0
+datasets>=2.20.0
+
+# ===== 工具 =====
+tqdm>=4.66.0
